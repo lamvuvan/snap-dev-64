@@ -380,6 +380,89 @@ void GetPageRankMP(const PGraph& Graph, TIntFlt64H& PRankH, const double& C, con
 }
 #endif // USE_OPENMP
 
+
+/*
+ * GetPageRankMP edit index
+*/
+//#ifdef USE_OPENMP
+//    // Page Rank -- there are two different implementations (uncomment the desired 2 lines):
+//    //   Berkhin -- (the correct way) see Algorithm 1 of P. Berkhin, A Survey on PageRank Computing, Internet Mathematics, 2005
+//    //   iGraph -- iGraph implementation(which treats leaked PageRank in a funny way)
+//    // This is a parallel, optimized version.
+//    template<class PGraph>
+//    void GetPageRankMP(const PGraph& Graph, TIntFlt64H& PRankH, const double& C, const double& Eps, const int64& MaxIter) {
+//      const int64 NNodes = Graph->GetNodes();
+//      TVec<typename PGraph::TObj::TNodeI> NV;
+//      PRankH.Gen(NNodes);
+//
+//      int64 MxId = -1;
+//      for (typename PGraph::TObj::TNodeI NI = Graph->BegNI(); NI < Graph->EndNI(); NI++) {
+//        NV.Add(NI);
+//        PRankH.AddDat(NI.GetId(), 1.0/NNodes);
+//        int64 Id = NI.GetId();
+//        if (Id > MxId) {
+//          MxId = Id;
+//        }
+//      }
+//
+////      TFlt64V PRankV(MxId+1);
+//      TFlt64V PRankV(NNodes+1);
+////      TInt64V OutDegV(MxId+1);
+//      TInt64V OutDegV(NNodes+1);
+//
+//#pragma omp parallel for schedule(dynamic,10000)
+//      for (int64 j = 0; j < NNodes; j++) {
+//        typename PGraph::TObj::TNodeI NI = NV[j];
+//        PRankV[j] = 1.0/NNodes;
+//        OutDegV[j] = NI.GetOutDeg();
+////        int64 Id = NI.GetId();
+////        PRankV[Id] = 1.0/NNodes;
+////        OutDegV[Id] = NI.GetOutDeg();
+//      }
+//
+//      TFlt64V TmpV(NNodes);
+//      for (int64 iter = 0; iter < MaxIter; iter++) {
+//#pragma omp parallel for schedule(dynamic,10000)
+//        for (int64 j = 0; j < NNodes; j++) {
+//          typename PGraph::TObj::TNodeI NI = NV[j];
+//          TFlt Tmp = 0;
+//          for (int64 e = 0; e < NI.GetInDeg(); e++) {
+////            const int64 InNId = NI.GetInNId(e);
+////            const int64 OutDeg = OutDegV[InNId];
+//            const int64 OutDeg = OutDegV[e];
+//            if (OutDeg > 0) {
+//              Tmp += PRankV[e] / OutDeg;
+//            }
+//          }
+//          TmpV[j] =  C*Tmp; // Berkhin (the correct way of doing it)
+//        }
+//
+//        double sum = 0;
+//#pragma omp parallel for reduction(+:sum) schedule(dynamic,10000)
+//        for (int64 i = 0; i < TmpV.Len(); i++) { sum += TmpV[i]; }
+//        const double Leaked = (1.0-sum) / double(NNodes);
+//
+//        double diff = 0;
+//#pragma omp parallel for reduction(+:diff) schedule(dynamic,10000)
+//        for (int64 i = 0; i < NNodes; i++) {
+//          double NewVal = TmpV[i] + Leaked; // Berkhin
+////          int64 Id = NV[i].GetId();
+//          diff += fabs(NewVal-PRankV[i]);
+////          diff += fabs(NewVal-PRankV[Id]);
+//          PRankV[i] = NewVal;
+//        }
+//        if (diff < Eps) { break; }
+//      }
+//
+//#pragma omp parallel for schedule(dynamic,10000)
+//      for (int64 i = 0; i < NNodes; i++) {
+//        typename PGraph::TObj::TNodeI NI = NV[i];
+//        PRankH[i] = PRankV[i];
+////        PRankH[i] = PRankV[NI.GetId()];
+//      }
+//    }
+//#endif // USE_OPENMP
+
 // Betweenness Centrality
 template<class PGraph>
 void GetBetweennessCentr(const PGraph& Graph, const TInt64V& BtwNIdV, TIntFlt64H& NodeBtwH, const bool& DoNodeCent, TIntPrFlt64H& EdgeBtwH, const bool& DoEdgeCent, const bool& IsDir) {
