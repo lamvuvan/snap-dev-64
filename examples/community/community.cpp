@@ -54,6 +54,8 @@ int main(int argc, char *argv[]) {
                     TInt64::GetStr(c).CStr());
         }
     }
+    fprintf(Fmeta, "# Run time: %s (%s)\n", ExeTm.GetTmStr(), TSecTm::GetCurTm().GetTmStr().CStr());
+    fclose(Fmeta);
     fclose(F);
 
     Catch
