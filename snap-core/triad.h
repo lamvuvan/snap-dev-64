@@ -179,6 +179,7 @@ namespace TSnap {
 
     template<class PGraph>
     void GetNodeClustCf(const PGraph &Graph, TIntFlt64H &NIdCCfH) {
+        double t1 = omp_get_wtime();
         TIntTr64V NIdCOTriadV;
 //        GetTriads(Graph, NIdCOTriadV);
         GetTriads_v0(Graph, NIdCOTriadV);
@@ -188,6 +189,8 @@ namespace TSnap {
             const double CCf = D != 0 ? NIdCOTriadV[i].Val2() / double(D) : 0.0;
             NIdCCfH.AddDat(NIdCOTriadV[i].Val1, CCf);
         }
+        double t2 = omp_get_wtime();
+        printf("Process %f\n", t2-t1);
     }
 
     template<class PGraph>

@@ -276,7 +276,7 @@ void GetPageRankMP3(const PGraph& Graph, TIntFltH& PRankH, const double& C, cons
   TVec<typename PGraph::TObj::TNodeI> NV;
   PRankH.Gen(NNodes);
   TIntIntH NIdH(NNodes);
-  //double t1 = omp_get_wtime();
+  double t1 = omp_get_wtime();
   int c = 0;
   for (typename PGraph::TObj::TNodeI NI = Graph->BegNI(); NI < Graph->EndNI(); NI++) {
     NV.Add(NI);
@@ -284,8 +284,8 @@ void GetPageRankMP3(const PGraph& Graph, TIntFltH& PRankH, const double& C, cons
     int Id = NI.GetId();
     NIdH.AddDat(Id, c++);
   }
-  //double t2 = omp_get_wtime();
-  //printf("Preprocessing %f\n", t2-t1);
+  double t2 = omp_get_wtime();
+  printf("Preprocessing %f\n", t2-t1);
 
   TFltV PRankV(NNodes);
   TIntV OutDegV(NNodes);
@@ -295,8 +295,8 @@ void GetPageRankMP3(const PGraph& Graph, TIntFltH& PRankH, const double& C, cons
     PRankV[NIdH.GetDat(Id)] = 1.0/NNodes;
     OutDegV[NIdH.GetDat(Id)] = NV[j].GetOutDeg();
   }
-  //double t3 = omp_get_wtime();
-  //printf("Collect degree %f\n", t3-t2);
+  double t3 = omp_get_wtime();
+  printf("Collect degree %f\n", t3-t2);
 
   TFltV TmpV(NNodes);
 
@@ -332,16 +332,16 @@ void GetPageRankMP3(const PGraph& Graph, TIntFltH& PRankH, const double& C, cons
     }
     if (diff < Eps) { break; }
   }
-  //double t4 = omp_get_wtime();
-  //printf("Iterate %f\n", t4-t3);
+  double t4 = omp_get_wtime();
+  printf("Iterate %f\n", t4-t3);
 
   #pragma omp parallel for schedule(dynamic,10000)
   for (int i = 0; i < NNodes; i++) {
     typename PGraph::TObj::TNodeI NI = NV[i];
     PRankH[i] = PRankV[NIdH.GetDat(NI.GetId())];
   }
-  //double t5 = omp_get_wtime();
-  //printf("Post-process %f\n", t5-t4);
+  double t5 = omp_get_wtime();
+  printf("Post-process %f\n", t5-t4);
 }
 
 template<class PGraph>
