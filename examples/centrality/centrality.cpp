@@ -22,25 +22,33 @@ int main(int argc, char *argv[]) {
     TIntFlt64H CcfH;
     TIntFlt64H CloseH;
     printf("Computing...\n");
-    printf("Treat graph as DIRECTED: ");
-    printf(" PageRank... ");
+    printf("Treat graph as DIRECTED: \n");
+    printf("PageRank...");
     TSnap::GetPageRank_v1(Graph, PRankH, 0.85);
-    printf(" Hubs&Authorities...");
-    TSnap::GetHits(Graph, HubH, AuthH);
-    printf("\nTreat graph as UNDIRECTED: ");
-    printf(" Eigenvector...");
+    printf("Hubs&Authorities...");
+    TSnap::GetHitsMP(Graph, HubH, AuthH);
+    printf("Treat graph as UNDIRECTED: \n");
+    printf("Eigenvector...");
     TSnap::GetEigenVectorCentr(UGraph, EigH);
-    printf(" Clustering...");
+    printf("Clustering...");
     TSnap::GetNodeClustCf(UGraph, CcfH);
-    printf(" Betweenness (SLOW!)...");
+    printf("Betweenness (SLOW!)...");
+    double t1 = omp_get_wtime();
     TSnap::GetBetweennessCentr(UGraph, BtwH, 1);
-    printf(" Constraint (SLOW!)...");
+    double t2 = omp_get_wtime();
+    printf("Process %f\n", t2-t1);
+    printf("Constraint (SLOW!)...");
     TNetConstraint <PUNGraph> NetC(UGraph, true);
-    printf(" Closeness (SLOW!)...");
+    double t3 = omp_get_wtime();
+    printf("Process %f\n", t3-t2);
+    printf("Closeness (SLOW!)...");
     for (TUNGraph::TNodeI NI = UGraph->BegNI(); NI < UGraph->EndNI(); NI++) {
         const int64 NId = NI.GetId();
-        CloseH.AddDat(NId, TSnap::GetClosenessCentr<PUNGraph>(UGraph, NId, false));
+        CloseH.AddDat(NId, TSnap::GetClosenessCentrMP<PUNGraph>(UGraph, NId, false));
     }
+    double t4 = omp_get_wtime();
+    printf("Process %f\n", t4-t3);
+
     printf("\nDONE! saving...");
     FILE *F = fopen(OutFNm.CStr(), "wt");
     FILE *Fmeta = fopen(OutMetaFNm.CStr(), "wt");
@@ -65,9 +73,9 @@ int main(int argc, char *argv[]) {
         const double AuthCentr = AuthH.GetDat(NId);
         fprintf(F, "%lli,%f,%f,%f,%f,%f,%f,%f,%f,%f\n", NId,
                 DegCentr, CloCentr, BtwCentr, EigCentr, Constraint, ClustCf, PgrCentr, HubCentr, AuthCentr);
-//        fprintf(F, "%lli\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", NId,
-//                DegCentr, CloCentr, BtwCentr, EigCentr, Constraint, ClustCf, PgrCentr, HubCentr, AuthCentr);
     }
+    fprintf(Fmeta, "# Run time: %s (%s)\n", ExeTm.GetTmStr(), TSecTm::GetCurTm().GetTmStr().CStr());
+    fclose(Fmeta);
     fclose(F);
     Catch
             printf("\nrun time: %s (%s)\n", ExeTm.GetTmStr(), TSecTm::GetCurTm().GetTmStr().CStr());
