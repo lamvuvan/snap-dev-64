@@ -1,0 +1,3 @@
+# Input: /home/lamvu/data/test.txt	Output: test_centrality.csv
+# Nodes: 46789	Edges: 756162
+# Run time: 02h59m (17:25:34)

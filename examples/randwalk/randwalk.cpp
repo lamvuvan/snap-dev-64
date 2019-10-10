@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
   Env = TEnv(argc, argv, TNotify::StdNotify);
   Env.PrepArgs(TStr::Fmt("RandWalk. build: %s, %s. Time: %s", __TIME__, __DATE__, TExeTm::GetCurTm()));
   Try
-  const TStr InFNm = Env.GetIfArgPrefixStr("-i:", "../as20graph.txt", "Input un/directed graph");
+  const TStr InFNm = Env.GetIfArgPrefixStr("-i:", argv[2], "Input un/directed graph");
   PNGraph Graph = TSnap::LoadEdgeList<PNGraph>(InFNm);
   
   BasicUsage(Graph);

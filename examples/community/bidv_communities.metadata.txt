@@ -1,0 +1,6 @@
+# Input: ../bidv.txt	Output: bidv_communities.csv
+# Nodes: 3134	Edges: 18923
+# Algoritm: Clauset-Newman-Moore
+# Modularity: 0.541808
+# Communities: 193
+# Run time: 0.25s (10:46:45)

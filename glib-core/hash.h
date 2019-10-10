@@ -673,6 +673,7 @@ typedef THash<TInt64, TFlt, int64> TIntFlt64H;
 typedef THash<TInt, TFltPr> TIntFltPrH;
 typedef THash<TInt, TFltTr> TIntFltTrH;
 typedef THash<TInt, TFltV> TIntFltVH;
+typedef THash<TInt64, TFltV> TInt64FltVH; // Lam added this using for node2vec module
 typedef THash<TInt, TStr> TIntStrH;
 typedef THash<TInt64, TStr, int64> TIntStr64H;
 typedef THash<TInt, TStrV> TIntStrVH;

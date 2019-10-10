@@ -1,0 +1,12 @@
+--------
+/home/lamvu/snap-dev-64/examples/community/community.Err
+Tue Jun 18 12:12:14 2019
+Message: TVec::Resize: std::exception, Length:192323584, Capacity:384647168, New capacity:-1, Type:4TVecI7TTripleI4TFlt6TInt64S2_ExE [Program failed to allocate more memory. Solution-1: Get a bigger machine and a 64-bit compiler.]
+Execution stopped: Fail, file ../glib-core/ds.h, line 871
+--------
+--------
+/home/lamvu/snap-dev-64/examples/community/community.Err
+Wed Jun 19 15:18:35 2019
+Message: TVec::Resize: std::exception, Length:153896960, Capacity:307793920, New capacity:-1, Type:4TVecI7TTripleI4TFlt6TInt64S2_ExE [Program failed to allocate more memory. Solution-1: Get a bigger machine and a 64-bit compiler.]
+Execution stopped: Fail, file ../glib-core/ds.h, line 871
+--------

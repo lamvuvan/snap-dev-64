@@ -5,6 +5,10 @@
 void LearnEmbeddings(TVVec<TInt, int64>& WalksVV, int& Dimensions, int& WinSize,
  int& Iter, bool& Verbose, TIntFltVH& EmbeddingsHV);
 
+///Learns embeddings using SGD, Skip-gram with negative sampling. Int 64bit
+void LearnEmbeddings(TVVec<TInt, int64>& WalksVV, int& Dimensions, int& WinSize,
+                     int& Iter, bool& Verbose, TInt64FltVH& EmbeddingsHV);
+
 //Max x for e^x. Value taken from original word2vec code.
 const int MaxExp = 6;
 
